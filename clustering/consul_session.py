@@ -50,13 +50,6 @@ options:
             to Consul and not required.
         required: false
         default: None
-    behavior:
-        description:
-          - the optional behavior that can be attached to the session when it
-            is created. This can be set to either ‘release’ or ‘delete’. This
-            controls the behavior when a session is invalidated.
-        default: release
-        required: false
     delay:
         description:
           - the optional lock delay that can be attached to the session when it
@@ -107,6 +100,14 @@ options:
         required: false
         default: True
         version_added: "2.1"
+    behavior:
+        description:
+          - the optional behavior that can be attached to the session when it
+            is created. This can be set to either ‘release’ or ‘delete’. This
+            controls the behavior when a session is invalidated.
+        default: release
+        required: false
+        version_added: "2.2"
 """
 
 EXAMPLES = '''
