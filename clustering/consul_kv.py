@@ -130,6 +130,13 @@ EXAMPLES = '''
     consul_kv:
       key: ansible/groups/dc1/somenode
       value: 'top_secret'
+
+  - name: Register a key/value pair with an associated session
+    consul_kv:
+      key: stg/node/server_birthday
+      value: 20160509
+      session: "{{ sessionid }}"
+      state: acquire
 '''
 
 import sys
