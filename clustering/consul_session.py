@@ -54,9 +54,8 @@ options:
         description:
           - the optional lock delay that can be attached to the session when it
             is created. Locks for invalidated sessions ar blocked from being
-            acquired until this delay has expired. Valid units for delays
-            include 'ns', 'us', 'ms', 's', 'm', 'h' 
-        default: 15s
+            acquired until this delay has expired.
+        default: 15
         required: false
     node:
         description:
@@ -196,7 +195,7 @@ def update_session(module):
         session = consul_client.session.create(
             name=name,
             node=node,
-            lock_delay=validate_duration('delay', delay),
+            lock_delay=delay,
             dc=datacenter,
             checks=checks
         )
@@ -228,14 +227,6 @@ def remove_session(module):
         module.fail_json(msg="Could not remove session with id '%s' %s" % (
                          session_id, e))
 
-def validate_duration(name, duration):
-    if duration:
-        duration_units = ['ns', 'us', 'ms', 's', 'm', 'h']
-        if not any((duration.endswith(suffix) for suffix in duration_units)):
-                raise Exception('Invalid %s %s you must specify units (%s)' %
-                    (name, duration, ', '.join(duration_units)))
-    return duration
-
 def get_consul_api(module):
     return consul.Consul(host=module.params.get('host'),
                          port=module.params.get('port'))
@@ -248,7 +239,7 @@ def test_dependencies(module):
 def main():
     argument_spec = dict(
         checks=dict(default=None, required=False, type='list'),
-        delay=dict(required=False,type='str', default='15s'),
+        delay=dict(required=False,type='int', default=15),
         host=dict(default='localhost'),
         port=dict(default=8500, type='int'),
         scheme=dict(required=False, default='http'),
